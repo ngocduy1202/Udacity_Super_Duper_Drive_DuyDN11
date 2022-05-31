@@ -35,7 +35,7 @@ public class CredentialController {
     @GetMapping()
     public String getHomePage(Authentication authentication,Model model, @ModelAttribute("newFile")FileForm newFile, @ModelAttribute("newNote")NoteForm newNote,
                               @ModelAttribute("newCredential")CredentialForm newCredential){
-        model.addAttribute("credentials", credentialService.getAllCredentialsByUserId(getUserId(authentication)));
+        model.addAttribute("credentials", this.credentialService.getAllCredentialsByUserId(getUserId(authentication)));
         model.addAttribute("encryptionService", encryptionService);
         return "home";
     }

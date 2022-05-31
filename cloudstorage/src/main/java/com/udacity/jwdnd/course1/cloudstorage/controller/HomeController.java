@@ -4,13 +4,11 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.*;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -76,9 +74,29 @@ public class HomeController {
         }else{
             model.addAttribute("message", "You have tried to add a duplicate file.");
         }
-        model.addAttribute("files",listFilesById );
+        model.addAttribute("files",listFilesById);
+        return "home";
+    }
+    @GetMapping("/delete-file/{fileId}")
+    public String deleteFile(Authentication authentication, Model model,
+                             @ModelAttribute("newFile") FileForm newFile,
+                             @ModelAttribute("newNote") NoteForm newNote,
+                             @ModelAttribute("newCredential") CredentialForm newCredential,
+                             @PathVariable("fileId") Integer fileId){
+        fileService.deleteFile(fileId);
+        model.addAttribute("files", fileService.getAllFileByUserId(getUserId(authentication)));
+
         return "home";
     }
 
+    @GetMapping(
+            value = "/download-file/{fileName}",
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+    )
+
+    public @ResponseBody
+    byte[] getFile(@PathVariable String fileName) {
+        return fileService.getFileByName(fileName).getFileData();
+    }
 
 }

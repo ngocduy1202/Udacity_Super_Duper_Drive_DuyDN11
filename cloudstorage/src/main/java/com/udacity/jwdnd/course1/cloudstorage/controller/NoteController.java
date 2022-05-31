@@ -25,7 +25,7 @@ public class NoteController {
     @GetMapping()
     public String getHomePage( Authentication authentication,@ModelAttribute("newFile")FileForm newFile, @ModelAttribute("newNote")NoteForm newNote,
                               @ModelAttribute("newCredential")CredentialForm credentialForm, Model model){
-        model.addAttribute("notes", noteService.getNotesByUser(getUserId(authentication)));
+        model.addAttribute("notes", this.noteService.getNotesByUser(getUserId(authentication)));
         return "home";
     }
 

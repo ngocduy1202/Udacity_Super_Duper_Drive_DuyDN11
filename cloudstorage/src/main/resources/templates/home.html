@@ -32,7 +32,7 @@
                                         <label for="fileUpload">Upload a New File:</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="file" th:field="*{file}" class="form-control-file" id="fileUpload" name="fileUpload">
+                                        <input type="file" th:field="*{multipartFile}" class="form-control-file" id="fileUpload" name="fileUpload">
                                     </div>
                                     <div class="col-sm-4">
                                         <button type="submit" class="btn btn-dark" id="uploadButton">Upload</button>
@@ -51,8 +51,8 @@
                                 <tbody>
                                 <tr th:each="file : ${files}">
                                     <td>
-                                        <a th:href="" target="_blank" class="btn btn-success">View</a>
-                                        <a th:href="" class="btn btn-danger">Delete</a>
+                                        <a th:href="@{/home/download-file/{fileName}(fileName = ${file.getFileName()})}" target="_blank" class="btn btn-success">View</a>
+                                        <a th:href="@{/home/delete-file/{fileId}(fileId = ${file.getFileId()})}" class="btn btn-danger">Delete</a>
                                     </td>
                                     <th th:text="${file.getFileName()}" scope="row">ExampleFile.txt</th>
                                 </tr>

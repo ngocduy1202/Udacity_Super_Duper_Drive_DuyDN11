@@ -21,15 +21,15 @@ public class FileService {
         this.userMapper = userMapper;
     }
 
-    public List<File> getAllFileByUserId( int id){
-        return fileMapper.getFileByUserId();
+    public List<File> getAllFileByUserId(Integer id){
+        return fileMapper.getFileByUserId(id);
     }
 
     public File getFileByName(String fileName){
         return fileMapper.getFile(fileName);
     }
 
-    public void deleteFile(int fileId){
+    public void deleteFile(Integer fileId){
         fileMapper.deleteFileId(fileId);
     }
 

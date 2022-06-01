@@ -19,6 +19,7 @@ class CloudStorageApplicationTests {
 	@LocalServerPort
 	private int port;
 
+	public String baseURL;
 	private WebDriver driver;
 
 	@BeforeAll
@@ -29,6 +30,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
+		baseURL = "http://localhost:" + port;
 	}
 
 	@AfterEach
@@ -133,7 +135,7 @@ class CloudStorageApplicationTests {
 	@Test
 	public void testRedirection() {
 		// Create a test account
-		doMockSignUp("Redirection","Test","RT","123");
+		//doMockSignUp("Redirection","Test","RT","123");
 		
 		// Check if we have been redirected to the log in page.
 		Assertions.assertEquals("http://localhost:" + this.port + "/login", driver.getCurrentUrl());
@@ -154,8 +156,8 @@ class CloudStorageApplicationTests {
 	@Test
 	public void testBadUrl() {
 		// Create a test account
-		doMockSignUp("URL","Test","UT","123");
-		doLogIn("UT", "123");
+		//doMockSignUp("URL","Test","UT","123");
+		//doLogIn("UT", "123");
 		
 		// Try to access a random made-up URL.
 		driver.get("http://localhost:" + this.port + "/some-random-page");
@@ -200,6 +202,59 @@ class CloudStorageApplicationTests {
 
 	}
 
+	@Test
+	public void testNote(){
+		//add new note
+		String title = "Note title";
+		String description = "Note Description";
+		String username = "duy";
+		String password = "123";
+		driver.get(baseURL+"/signup");
+		SignUpTest signUpTest = new SignUpTest(driver);
+		signUpTest.signUp("Ngoc", "Duy",username,password);
+		driver.get(baseURL+"/login");
+		LoginTest loginTest = new LoginTest(driver);
+		loginTest.login(username,password);
+		HomePageTest homePageTest = new HomePageTest(driver);
+		homePageTest.navToNotesTab();
+		homePageTest.addNewNote(title,description);
 
+		//edit note
+		homePageTest.navToNotesTab();
+		String titleEdited = "New title";
+		String descriptionEdited = "New Description";
+		homePageTest.editNote(titleEdited,descriptionEdited);
+
+//		//delete note
+		homePageTest.navToNotesTab();
+		homePageTest.deleteNote();
+
+		homePageTest.logout();
+
+
+	}
+
+	@Test
+	public void testCredential(){
+		String url = "abc.com";
+		String username = "duy";
+		String password = "123";
+		driver.get(baseURL+"/signup");
+		SignUpTest signUpTest = new SignUpTest(driver);
+		signUpTest.signUp("Ngoc", "Duy",username,password);
+		driver.get(baseURL+"/login");
+		LoginTest loginTest = new LoginTest(driver);
+		loginTest.login(username,password);
+		HomePageTest homePageTest = new HomePageTest(driver);
+		//add credential
+		homePageTest.navToCredentialsTab();
+		homePageTest.addCredential(url,username,password);
+		//edit credential
+		homePageTest.navToCredentialsTab();
+		homePageTest.editCredential("new url","new username", "new password");
+		//delete credential
+		homePageTest.navToCredentialsTab();
+		homePageTest.deleteCredential();
+	}
 
 }

@@ -71,11 +71,15 @@ public class HomeController {
         }
         if(!duplicatedFile){
             fileService.addFile(multipartFile,username);
+            model.addAttribute("result", "success");
         }else{
+            model.addAttribute("message", "You have tried to add a duplicate file.");
+
+            model.addAttribute("result", "error");
             model.addAttribute("message", "You have tried to add a duplicate file.");
         }
         model.addAttribute("files",listFilesById);
-        return "home";
+        return "result";
     }
     @GetMapping("/delete-file/{fileId}")
     public String deleteFile(Authentication authentication, Model model,
@@ -85,8 +89,8 @@ public class HomeController {
                              @PathVariable("fileId") Integer fileId){
         fileService.deleteFile(fileId);
         model.addAttribute("files", fileService.getAllFileByUserId(getUserId(authentication)));
-
-        return "home";
+        model.addAttribute("result", "success");
+        return "result";
     }
 
     @GetMapping(

@@ -44,8 +44,9 @@ public class NoteController {
         }
 
         model.addAttribute("notes", noteService.getNotesByUser(getUserId(authentication)));
+        model.addAttribute("result", "success");
 
-        return "home";
+        return "result";
     }
 
     @GetMapping("/delete-note/{noteId}")
@@ -54,7 +55,9 @@ public class NoteController {
         noteService.deleteNote(noteId);
         Integer userId = getUserId(authentication);
         model.addAttribute("notes", noteService.getNotesByUser(userId));
-        return "home";
+        model.addAttribute("result", "success");
+
+        return "result";
     }
 
     public int getUserId(Authentication authentication){

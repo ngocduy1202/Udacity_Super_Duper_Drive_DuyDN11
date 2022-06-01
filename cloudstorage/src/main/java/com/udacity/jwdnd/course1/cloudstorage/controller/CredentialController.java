@@ -68,7 +68,9 @@ public class CredentialController {
         }
 
         model.addAttribute("credentials", credentialService.getAllCredentialsByUserId(getUserId(authentication)));
-        return "home";
+        model.addAttribute("result", "success");
+
+        return "result";
     }
 
     @GetMapping("/delete-credential/{credentialId}")
@@ -80,6 +82,8 @@ public class CredentialController {
 
         credentialService.deleteCredential(credentialId);
         model.addAttribute("credentials", credentialService.getAllCredentialsByUserId(getUserId(authentication)));
-        return "home";
+        model.addAttribute("result", "success");
+
+        return "result";
     }
 }

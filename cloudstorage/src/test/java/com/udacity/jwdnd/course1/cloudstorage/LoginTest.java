@@ -22,6 +22,6 @@ public class LoginTest {
     public void login(String username, String password){
         usernameField.sendKeys(username);
         passwordField.sendKeys(password);
-        btnLogin.click();
+        btnLogin.submit();
     }
 }

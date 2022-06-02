@@ -1,9 +1,15 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePageTest {
     @FindBy(id = "btnLogout")
@@ -66,70 +72,147 @@ public class HomePageTest {
     @FindBy(id = "btnCredentialSaveChanges")
     private WebElement btnCredentialSaveChanges;
 
+    @FindBy(id="tblCredentialUrl")
+    private WebElement credentialUrl;
+
+    @FindBy(id="tblCredentialUsername")
+    private WebElement credentialUsername;
+
+    @FindBy(id="tblCredentialPassword")
+    private WebElement credentialPassword;
+
     @FindBy(id = "credentialSubmit")
     private WebElement btnCredentialSubmit;
 
     @FindBy(id="aResultSuccess")
-    private WebElement btnContinue;
+    public WebElement btnContinue;
+
+    private final JavascriptExecutor js;
+    private final WebDriverWait wait;
 
     public HomePageTest(WebDriver webDriver){
         PageFactory.initElements(webDriver, this);
+        js = (JavascriptExecutor) webDriver;
+        wait = new WebDriverWait(webDriver, 500);
     }
 
+
+
     public void logout(){
-        this.logoutButton.click();
+        js.executeScript("arguments[0].click();", logoutButton);
     }
 
     public void navToNotesTab(){
-        this.navNotesTab.click();
+        js.executeScript("arguments[0].click();", navNotesTab);
     }
 
     public void navToCredentialsTab(){
-        this.navCredentialsTab.click();
+        js.executeScript("arguments[0].click();", navCredentialsTab);
+
     }
 
-    public void addNewNote(String title, String description){
-        this.btnAddNewNote.click();
-        this.txtNoteTitle.sendKeys(title);
-        this.txtNoteDescription.sendKeys(description);
-        this.btnSaveChanges.click();
-        this.btnContinue.click();
+    public void setNoteTitle(String title){
+        js.executeScript("arguments[0].value='" + title + "';", txtNoteTitle);
     }
 
-    public void editNote(String title, String description){
-        this.navNotesTab.click();
-        this.btnEditNote.click();
-        this.txtNoteTitle.sendKeys(title);
-        this.txtNoteDescription.sendKeys(description);
-        this.btnSaveChanges.click();
-        this.btnContinue.click();
+    public void setNoteDescription(String description){
+        js.executeScript("arguments[0].value='" + description + "';", txtNoteDescription);
+    }
+
+    public Note getFirstNote(){
+       String title = wait.until(ExpectedConditions.elementToBeClickable(tableNoteTitle)).getText();
+       String description = tableNoteDescription.getText();
+       return new Note(title,description);
+    }
+
+    public void clearNoteTitle(){
+        js.executeScript("arguments[0].value='" + "" + "';", txtNoteTitle);
+    }
+
+    public void clearNoteDescriptoin(){
+        js.executeScript("arguments[0].value='" + "" + "';", txtNoteDescription);
+    }
+
+    public void saveChangesNote(){
+        js.executeScript("arguments[0].click();", btnSaveChanges);
+    }
+
+    public void clickContinueOnResult(){
+        js.executeScript("arguments[0].click();", btnContinue);
+    }
+
+    public void openNewNotesModal(){
+        js.executeScript("arguments[0].click();", btnAddNewNote);
+    }
+    public void openEditNotesModal(){
+        js.executeScript("arguments[0].click();", btnEditNote);
+    }
+
+    public boolean isElementExists(By locatorKey, WebDriver driver) {
+        try {
+            driver.findElement(locatorKey);
+
+            return true;
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
+        }
+    }
+    public boolean noNotes(WebDriver driver) {
+        return !isElementExists(By.id("tableNoteTitle"), driver) && !isElementExists(By.id("tableNoteDescription"), driver);
     }
 
     public void deleteNote(){
-        this.btnDeleteNote.click();
-        this.btnContinue.click();
+        js.executeScript("arguments[0].click();", btnDeleteNote);
     }
 
-    public void addCredential(String url, String username, String password){
-        this.btnAddNewCredential.click();
-        this.txtCredentialUrl.sendKeys(url);
-        this.txtCredentialUsername.sendKeys(username);
-        this.txtCredentialPassword.sendKeys(password);
-        this.btnCredentialSaveChanges.click();
-        this.btnContinue.click();
+    public void openNewCredentialModal(){
+        js.executeScript("arguments[0].click();", btnAddNewCredential);
+    }
+    public void setCredentialUrl(String url){
+        js.executeScript("arguments[0].value='" + url + "';", txtCredentialUrl);
     }
 
-    public void editCredential(String url, String username, String password){
-        this.btnEditCredential.click();
-        this.txtCredentialUrl.sendKeys(url);
-        this.txtCredentialUsername.sendKeys(username);
-        this.txtCredentialPassword.sendKeys(password);
-        this.btnCredentialSaveChanges.click();
-        this.btnContinue.click();
+    public void setCredentialUsername(String username){
+        js.executeScript("arguments[0].value='" + username + "';", txtCredentialUsername);
+    }
+
+    public void setCredentialPassword(String password){
+        js.executeScript("arguments[0].value='" + password + "';", txtCredentialPassword);
+    }
+
+    public void clearCredentialUrl(){
+        js.executeScript("arguments[0].value='" + "" + "';", txtCredentialUrl);
+    }
+
+    public void clearCredentialUsername(){
+        js.executeScript("arguments[0].value='" + "username" + "';", txtCredentialUsername);
+    }
+
+    public void clearCredentialPassword(){
+        js.executeScript("arguments[0].value='" + "password" + "';", txtCredentialPassword);
+    }
+
+    public Credential getFirstCredential(){
+        String url = wait.until(ExpectedConditions.elementToBeClickable(credentialUrl)).getText();
+        String username = credentialUsername.getText();
+        String password = credentialPassword.getText();
+        return new Credential(url,username,password);
+    }
+    public void saveChangesCredential(){
+        js.executeScript("arguments[0].click();", btnCredentialSaveChanges);
+    }
+
+    public void openEditCredentialModal(){
+        js.executeScript("arguments[0].click();", btnEditCredential);
+    }
+
+    public boolean noCredential(WebDriver driver) {
+        return !isElementExists(By.id("tblCredentialUrl"), driver)
+                && !isElementExists(By.id("tblCredentialUsername"), driver)
+                && !isElementExists(By.id("tblCredentialPassword"), driver);
     }
 
     public void deleteCredential(){
-        this.btnDeleteCredential.click();
-        this.btnContinue.click();
+        js.executeScript("arguments[0].click();", btnDeleteCredential);
     }
 }

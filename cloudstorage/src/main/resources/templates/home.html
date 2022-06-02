@@ -153,9 +153,9 @@
                                         Edit</button>
                                         <a id="btnDeleteCredential" class="btn btn-danger" th:href="@{/credential/delete-credential/{credentialId}(credentialId = ${credential.getCredentialId()})}" >Delete</a>
                                     </td>
-                                    <th th:text="${credential.getUrl()}" scope="row">Example Credential URL</th>
-                                    <td th:text="${credential.getUsername()}" >Example Credential Username</td>
-                                    <td th:text="${credential.getPassword()}">Example Credential Password</td>
+                                    <th id="tblCredentialUrl" th:text="${credential.getUrl()}" scope="row">Example Credential URL</th>
+                                    <td id="tblCredentialUsername" th:text="${credential.getUsername()}" >Example Credential Username</td>
+                                    <td id="tblCredentialPassword" th:text="${credential.getPassword()}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>

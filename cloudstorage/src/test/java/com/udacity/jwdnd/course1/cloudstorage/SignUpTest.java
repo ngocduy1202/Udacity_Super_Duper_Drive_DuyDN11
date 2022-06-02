@@ -22,6 +22,9 @@ public class SignUpTest {
     @FindBy(id = "buttonSignUp")
     WebElement btnSignUp;
 
+    @FindBy(id = "btnNavigateToLogin")
+    WebElement btnLogin;
+
     public SignUpTest(WebDriver webDriver){
         PageFactory.initElements(webDriver, this);
     }
@@ -31,7 +34,11 @@ public class SignUpTest {
         lnameField.sendKeys(lname);
         usernameField.sendKeys(username);
         passwordField.sendKeys(password);
-        btnSignUp.click();
+        btnSignUp.submit();
+    }
+
+    public void navigateLogin(){
+        this.btnLogin.submit();
     }
 
 }
